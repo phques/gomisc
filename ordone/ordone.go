@@ -10,17 +10,14 @@ func OrDone[T any](done <-chan struct{}, dataChannel <-chan T) <-chan T {
 		for {
 			select {
 			case <-done:
-				println("orDone goroutine stopped, done channel closed")
 				return
 			case v, ok := <-dataChannel:
 				if !ok {
-					println("orDone goroutine stopped: dataChannel closed!")
 					return
 				}
 				select {
 				case valStream <- v:
 				case <-done:
-					println("orDone goroutine stopped, done channel closed")
 					return
 				}
 			}
@@ -39,17 +36,14 @@ func OrDone_(done <-chan struct{}, dataChannel <-chan interface{}) <-chan interf
 		for {
 			select {
 			case <-done:
-				println("orDone stopped")
 				return
 			case v, ok := <-dataChannel:
 				if !ok {
-					println("orDone stopped: dataChannel closed!")
 					return
 				}
 				select {
 				case valStream <- v:
 				case <-done:
-					println("orDone stopped")
 					return
 				}
 			}
